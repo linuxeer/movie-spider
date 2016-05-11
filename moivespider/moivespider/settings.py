@@ -10,7 +10,7 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
 BOT_NAME = 'moivespider'
-DOWNLOAD_DELAY = 0.5
+DOWNLOAD_DELAY = 2
 DOWNLOAD_TIMEOUT = 10
 SPIDER_MODULES = ['moivespider.spiders']
 NEWSPIDER_MODULE = 'moivespider.spiders'

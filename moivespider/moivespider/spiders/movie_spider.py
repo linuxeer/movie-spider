@@ -19,15 +19,18 @@ class MovieSpiderSpider(scrapy.Spider):
     def parse(self, response):
         for sel in response.xpath('//select[@name="sldd"]//option/@value'):
             url = urljoin(response.url, sel.extract())
+            # print '*' * 10, url, '*' * 10
             yield scrapy.Request(url, callback = self.parse_movie, dont_filter = True)
 
     # 解析出所有的电影名和此电影的详情页地址
     def parse_movie(self, response):
+        print '*' * 10, response.url, '*' * 10
         for sel in response.xpath('//div[@class="co_content8"]//td//b'):
             title = sel.xpath('a[re:test(@href,"/html/gndy/.+/\d+.html")]/text()').extract()[0].encode('utf-8')
             url = "http://www.ygdy8.net/" + sel.xpath('a[re:test(@href,"/html/gndy/.+/\d+.html")]/@href').extract()[0].encode('utf-8')
             begin = title.index("《")
             end = title.index("》")
+            print title
             yield scrapy.Request('https://movie.douban.com/j/subject_suggest?q=' + title[begin + 3:end], callback = self.parse_douban_url, dont_filter = True,
                                  headers = {"User-Agent": "Mozilla/5.0"}, meta = {"name": title[begin + 3:end], "url": url})
 
